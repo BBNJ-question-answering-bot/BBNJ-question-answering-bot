@@ -1,0 +1,45 @@
+services:
+  ocean-policy-ai-web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    # command: python manage.py runserver 0.0.0.0:8000
+    command: python gradioserver.py
+    volumes:
+      - .:/code
+      - ./logs:/logs
+    ports:
+      #- "8000"
+      - "7860:7860"
+    expose:
+      - 7860
+    environment: 
+      - WEAVIATE_HOST=docker-ocean-policy-ai-weaviate-1
+      - LOGGING_PATH=./logs
+    depends_on:
+      - ocean-policy-ai-weaviate
+  ocean-policy-ai-weaviate:
+    command:
+    - --host
+    - 0.0.0.0
+    - --port
+    - '8080'
+    - --scheme
+    - http
+    image: semitechnologies/weaviate:1.17.2
+    ports:
+    - 8080
+    restart: on-failure:0
+    volumes:
+      - /var/weaviate:/var/lib/weaviate
+      - ./weaviate-backup:/var/weaviate-backups
+    environment:
+      QUERY_DEFAULTS_LIMIT: 25
+      AUTHENTICATION_ANONYMOUS_ACCESS_ENABLED: 'true'
+      PERSISTENCE_DATA_PATH: '/var/lib/weaviate'
+      BACKUP_FILESYSTEM_PATH: '/var/weaviate-backups'
+      DEFAULT_VECTORIZER_MODULE: 'text2vec-openai'
+      ENABLE_MODULES: 'text2vec-openai,qna-openai,backup-filesystem'
+      CLUSTER_HOSTNAME: 'openai-weaviate-cluster'
+      # The following parameter (`OPENAI_APIKEY`) is optional, as you can also provide it at insert/query time
+      # OPENAI_APIKEY: sk-foobar 

@@ -1,0 +1,5 @@
+Django == 4.2.* # Django 4.2 LTS
+weaviate-client >= 3.11.0
+openai[datalib]
+gradio==3.40
+tiktoken==0.4.0

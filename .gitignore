@@ -1,0 +1,6 @@
+flagged
+# openai_key.py
+env
+data
+logs
+weaviate-backup

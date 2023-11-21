@@ -1,0 +1,7 @@
+This is code for the "BBNJ Question-Answering Bot," a chatbot that tries to answer questions about the UN Biodiversity Beyond National Juristiction Agreement. It accompanies the paper "AI Language Models Can Help or Harm Equity in Marine Policy: The Case Study of the BBNJ Question-Answering Bot." The bot works by searching an embeddings index for passages relevant to a user's query, and then sending the passages and query to OpenAI's GPT API.
+
+The easiest way to run the application is via docker-compose, which has all of the neccesary images and configuration. If you don't want to use docker, you'll need to install Weaviate on your system, along with the packages from requirements.txt.
+
+Before you can run the bot, you need to build or restore the embeddings index. There is a backup included in this respository, which you can restore to your weaviate instance with weaviate_backup_restore.py. Alternatively, you can rebuild the index using index-builder/buildindex.py. If you want to modify the documents in the index, one way is to edit document-manifest.csv before running the builder script. The index-builder consumes JSON files from index-builder/document-json, in the format output by AI2's Science Parse software (v1) for extracting text and headings from PDF's.
+
+Once the embeddings index is restored or built, you can run the BBNJ Question-Answering Bot by running gradioserver.py. (Or if you use docker, this script will start automatically).
